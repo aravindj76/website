@@ -1,0 +1,154 @@
+
+function generateNewData() {
+    
+    // Reset the data object back to its empty state.
+    data.nodes = [];
+    data.links = []; 
+    var server=new Create2DArray(2);
+    const map1 = new Map();
+    
+    let iden=["Meritta", "Plasma", "Vertex"];
+    let cat=["Residential"];
+    let idno=1;
+    let uinnoParent=1;
+    let type=["camera", "Infer IoT", "Analytic Server"];
+  
+    // Create nodes.
+    let count=1;
+    let parentNodeCount=5;
+    let groupX=150;
+    let groupY=50;
+    let color=d3.interpolateRainbow(5);
+  
+    for (let k = 0; k < FACILITY_COUNT; k++) {
+        groupY=50;
+        for (let g = 0; g < IoT_COUNT; g++) {
+            color= d3.interpolateRainbow(Math.floor(randBetween(1,7)));
+            for (let i = 0; i < NODES_IN_GROUP; i++) {
+              let node = {
+                  id: idno,
+                  color: color,
+                  size: 3,
+                  location:iden[k],
+                  nodeType:type[0],
+                  xaxis: Math.floor(randBetween(groupX, groupX+150)),
+                  yaxis: Math.floor(randBetween(groupY, groupY+200)),
+                  Category:cat[0],
+                  url:"https://raw.githubusercontent.com/aravindj76/misc/master/CameraLogo1.png"
+              };
+              data.nodes.push(node);
+              idno++;
+              count++;
+            }  groupY=groupY+150;groupX=groupX+100;//color=d3.interpolateRainbow(3);
+             let node = {
+                  id: idno,
+                  //color: d3.interpolateRainbow(i /NUMBER_OF_L1_NODES),
+                  color: d3.interpolateRainbow(8),
+                  size: 5,
+                  location:iden[k],
+                  nodeType:type[1],
+                  xaxis: 105,
+                  yaxis: 40+parentNodeCount*40,
+                  Category:cat[0],
+                  url:"https://raw.githubusercontent.com/aravindj76/misc/master/ModemLogo.png"
+              };
+            data.nodes.push(node);
+            idno++;
+            parentNodeCount++;
+         }
+         map1.set(iden[k], idno);
+         let node = {
+                  id: idno,
+                  //color: d3.interpolateRainbow(i /NUMBER_OF_L1_NODES),
+                  color: "rgb(110, 64, 190)",
+                  size: 9,
+                  location:iden[k],
+                  nodeType:type[2],
+                  xaxis: 45,
+                  yaxis: 40+parentNodeCount*40,
+                  Category:cat[0],
+                  mapme:map1.size,
+                  url:"https://raw.githubusercontent.com/aravindj76/misc/master/ServerLogo1.png"
+              };
+            data.nodes.push(node);
+            idno++;
+            parentNodeCount++;
+            //map1.set(iden[k], idno);
+      
+    }
+    idno--;
+    var sourceCount=0;
+    var targetCount=8;
+    var templocal=0;
+    var serverCheck=0;
+    let count1=0;
+    for (let i = 0; i < idno; i=templocal) {
+        count1=0;
+        for (let j = 0 ; j < NODES_IN_GROUP; j++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(j/NODES_IN_GROUP),
+                    source: data.nodes[sourceCount],
+                    target: data.nodes[targetCount],
+                    weight: 1,
+                    temp:templocal
+                };
+                sourceCount++;
+                data.links.push(link);
+                count1++;
+        }sourceCount++;count1++;
+        
+                 let link = {
+                        color: "rgb(110, 64, 200)",
+                        source: data.nodes[targetCount],
+                        target: data.nodes[map1.get(data.nodes[targetCount].location)-1],
+                        weight: 4,
+                        temp:templocal
+                    };
+       data.links.push(link);
+        if((i+count1) <= idno){
+            if (data.nodes[sourceCount].nodeType == type[2]){
+                    sourceCount++;
+                    serverCheck++;
+                    count1++;
+                    
+            }
+        }
+        templocal=i+count1;
+        targetCount=targetCount+9+serverCheck;
+        serverCheck=0;
+    }
+    return data;
+}
+
+
+//data=({nodes:[],links:[]});
+
+generateNewData();
+
+NODES_IN_GROUP=8;
+
+FACILITY_COUNT=2
+
+IoT_COUNT=3
+
+tooltip = d3.select('body').append("div")
+
+hlColor = "#18aef9"
+
+DEFAULT_RADIUS=8
+
+color1 = {
+  const scale = d3.scaleOrdinal(d3.schemeCategory10);
+  return d => scale(d.group);
+}
+
+color = {
+  const scale = d3.scaleOrdinal(d3.schemeCategory10);
+  return d => scale(d.group);
+}
+radius = 32
+
+function randBetween(min, max) {
+    return min + (max - min) * Math.random();
+}

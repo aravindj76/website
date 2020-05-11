@@ -1,0 +1,711 @@
+
+
+function generateNewData() {
+    // Reset the data object back to its empty state.
+    data.nodes = [];
+    data.links = []; 
+  
+     //-----------------------------------Parent DNN-------------------------------------------------
+    // Create Cascade 1 
+    //Create nodes.
+    let N0 = NUMBER_OF_INIT_NODES;
+    let count=1;
+    for (let i = 0; i < N0; i++) {
+        let node = {
+            id: i,
+            color: d3.interpolateRainbow(i /NUMBER_OF_INIT_NODES),
+            size: 1,
+            xaxis: 45,
+            yaxis: 250+count*75,
+            lvl:0
+        };
+        data.nodes.push(node);
+        count++;
+    }
+  
+    // Create nodes.
+    let N1 = N0+NUMBER_OF_L1_NODES;
+    count=1;
+    for (let i = NUMBER_OF_INIT_NODES; i < N1; i++) {
+        let node = {
+            id: i,
+            //color: d3.interpolateRainbow(i /NUMBER_OF_L1_NODES),
+            color: "rgb(110, 64, 170)",
+            size: 9,
+            xaxis: 150,
+            yaxis: 80+count*75,
+            lvl:1
+        };
+        data.nodes.push(node);
+        count++;
+    }
+
+  // Create nodes.
+    count=1;
+    let N2 = N1 + NUMBER_OF_L2_NODES;
+    for (let i = N1; i < N2; i++) {
+        let node = {
+            id: i,
+            color: "rgb(238, 67, 149)",
+            size: 9,
+            xaxis: 300,
+            yaxis: 50+ count*50,
+            lvl:2
+        };
+        data.nodes.push(node);
+        count++;
+    }
+  // Create nodes.
+    count=1;
+    let N3 = N2 + NUMBER_OF_L2_NODES;
+    for (let i = N2; i < N3; i++) {
+        let node = {
+            id: i,
+            color: "rgb(255, 140, 56)",
+            size: 9,
+            xaxis: 400,
+            yaxis: 50+count*50,
+            lvl:3
+        };
+        data.nodes.push(node);
+        count++;
+    }
+  
+  // Create nodes.
+    count=1;
+    let N4 = N3 + NUMBER_OF_L3_NODES;
+    for (let i = N3; i < N4; i++) {
+        let node = {
+            id: i,
+            color: "rgb(47, 150, 224)",
+            size: 9,
+            xaxis: 550,
+            yaxis: 150+count*75,
+            lvl:4
+        };
+        data.nodes.push(node);
+        count++;
+    }
+
+    // Create nodes.
+    count=1;
+    let CN1LastNode=0
+    for (let i = N3; i < N4; i++) {
+        let node = {
+            id: i+NUMBER_OF_L3_NODES,
+            color: d3.interpolateRainbow(i/NUMBER_OF_L3_NODES),
+            size: 1,
+            xaxis: 600,
+            yaxis: 150+count*75,
+            lvl:5
+        };
+        data.nodes.push(node);
+        count++;
+        CN1LastNode=i+NUMBER_OF_L3_NODES;
+    }
+  
+
+      // Create links.
+    let v0 = NUMBER_OF_INIT_NODES;
+    let v1 = v0 + NUMBER_OF_L1_NODES; 
+    let v2 = v1 +NUMBER_OF_L2_NODES; 
+    for (let i = 0; i < v0; i++) {
+        for (let j = v0 ; j < v1; j++) {
+                let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[j],
+                    lvl:12,
+                    weight: Math.floor(randBetween(1, minSize))
+                };
+                data.links.push(link);
+            
+        }
+    }
+  
+  
+    // Create links.
+    
+    for (let i = v0; i < v1; i++) {
+        for (let j = v1 ; j < v2; j++) {
+                let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[j],
+                    lvl:12,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+            
+        }
+    }
+  
+          // Create links.
+    let v3 = v2 + NUMBER_OF_L2_NODES;
+    for (let i = v1; i < v2; i++) {
+        for (let j = v2 ; j < v3; j++) {
+                let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[j],
+                    lvl:23,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+            
+        }
+    }
+
+      // Create links.
+    let v4 = v3 + NUMBER_OF_L3_NODES;
+    for (let i = v2; i < v3; i++) {
+        for (let j = v3 ; j < v4; j++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[j],
+                    lvl:34,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+        }
+    }
+  
+        // Create links.
+     let v5 = v4 + NUMBER_OF_L3_NODES;
+    for (let i = v3; i < v4; i++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[i+NUMBER_OF_L3_NODES],
+                    lvl:45,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+    }
+  
+    //-------------------------------------Child DNN1-----------------------------------------------
+    // Create Cascade 2
+    // Create nodes.
+    // Create nodes.
+    let CN2Start=CN1LastNode+1;
+    let CN2 = CN1LastNode+1+NUMBER_OF_2L1_NODES;
+    count=1;
+    for (let i = CN2Start; i < CN2; i++) {
+        let node = {
+            id: i,
+            color: "rgb(47, 79, 79)",
+            size: 2,
+            xaxis: 650,
+            yaxis: 60+count*20,
+            lvl:1
+        };
+        data.nodes.push(node);
+        count++;
+    }
+    
+  let CN3 = CN2+NUMBER_OF_2L2_NODES;
+    count=1;
+    for (let i = CN2; i < CN3; i++) {
+        let node = {
+            id: i,
+            color: "rgb(47, 79, 79)",
+            size: 2,
+            xaxis: 700,
+            yaxis: 40+count*20,
+            lvl:2
+        };
+        data.nodes.push(node);
+        count++;
+    }
+  
+  let CN4 = CN3+NUMBER_OF_2L3_NODES;
+    count=1;
+    for (let i = CN3; i < CN4; i++) {
+        let node = {
+            id: i,
+            color: "rgb(47, 79, 79)",
+            size: 2,
+            xaxis: 740,
+            yaxis: 50+count*30,
+            lvl:3
+        };
+        data.nodes.push(node);
+        count++;
+    }
+  
+    count=1;
+    let CN21LastNode=0
+    for (let i = CN3; i < CN4; i++) {
+        let node = {
+            id: i+NUMBER_OF_2L3_NODES,
+            color: "rgb(47, 79, 79)",
+            size: 1,
+            xaxis: 780,
+            yaxis: 50+count*30,
+            lvl:4
+        };
+        data.nodes.push(node);
+        count++;
+        CN21LastNode=i+NUMBER_OF_2L3_NODES;
+    }
+  
+  
+    // Create links.
+    for (let i = CN2Start; i < CN2; i++) {
+        for (let j = CN2 ; j < CN3; j++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[j],
+                    lvl:212,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+        }
+    }
+  
+  for (let i = CN2; i < CN3; i++) {
+        for (let j = CN3 ; j < CN4; j++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[j],
+                    lvl:223,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+        }
+    }
+
+     for (let i = CN3; i < CN4; i++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_2L3_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[i+NUMBER_OF_2L3_NODES],
+                    lvl:223,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+    }
+
+  
+        for (let j = CN2Start ; j < CN2; j++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(v3 /NUMBER_OF_NODES),
+                    source: data.nodes[v3],
+                    target: data.nodes[j],
+                    lvl:34,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+        }
+  
+     //--------------------------------Child DNN2----------------------------------------------------
+  
+  // Create Cascade 3
+    // Create nodes.
+    // Create nodes.
+    let CN3Start=CN21LastNode+1;
+        CN2 = CN3Start+NUMBER_OF_2L1_NODES;
+    count=1;
+    for (let i = CN3Start; i < CN2; i++) {
+        let node = {
+            id: i,
+            color: "rgb(218, 165, 32)",
+            size: 2,
+            xaxis: 650,
+            yaxis: 170+count*20,
+            lvl:1
+        };
+        data.nodes.push(node);
+        count++;
+    }
+    
+    CN3 = CN2+NUMBER_OF_2L2_NODES;
+    count=1;
+    for (let i = CN2; i < CN3; i++) {
+        let node = {
+            id: i,
+            color: "rgb(218, 165, 32)",
+            size: 2,
+            xaxis: 700,
+            yaxis: 160+count*20,
+            lvl:2
+        };
+        data.nodes.push(node);
+        count++;
+    }
+  
+    CN4 = CN3+NUMBER_OF_2L3_NODES;
+    count=1;
+    for (let i = CN3; i < CN4; i++) {
+        let node = {
+            id: i,
+            color: "rgb(218, 165, 32)",
+            size: 2,
+            xaxis: 740,
+            yaxis: 170+count*30,
+            lvl:3
+        };
+        data.nodes.push(node);
+        count++;
+    }
+  
+    count=1;
+    let CN22LastNode=0
+    for (let i = CN3; i < CN4; i++) {
+        let node = {
+            id: i+NUMBER_OF_2L3_NODES,
+            color: "rgb(218, 165, 32)",
+            size: 1,
+            xaxis: 780,
+            yaxis: 170+count*30,
+            lvl:4
+        };
+        data.nodes.push(node);
+        count++;
+        CN22LastNode=i+NUMBER_OF_2L3_NODES;
+    }
+  
+    // Create links.
+      for (let i = CN3Start; i < CN2; i++) {
+        for (let j = CN2 ; j < CN3; j++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[j],
+                    lvl:222,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+        }
+    }
+  
+  
+  for (let i = CN2; i < CN3; i++) {
+        for (let j = CN3 ; j < CN4; j++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[j],
+                    lvl:223,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+        }
+    }
+
+     for (let i = CN3; i < CN4; i++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_2L3_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[i+NUMBER_OF_2L3_NODES],
+                    lvl:234,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+    }
+
+  
+        for (let j = CN3Start ; j < CN2; j++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(v3 /NUMBER_OF_NODES),
+                    source: data.nodes[v3+1],
+                    target: data.nodes[j],
+                    lvl:34,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+        }
+  
+   //--------------------------------Child DNN3----------------------------------------------------
+  
+  // Create Cascade 3
+    // Create nodes.
+    // Create nodes.
+    let CN4Start=CN22LastNode+1;
+        CN2 = CN4Start+NUMBER_OF_2L1_NODES;
+    count=1;
+    for (let i = CN4Start; i < CN2; i++) {
+        let node = {
+            id: i,
+            //color: d3.interpolateRainbow(i /NUMBER_OF_L1_NODES),
+            color: "rgb(32, 178, 170)",
+            size: 2,
+            xaxis: 650,
+            yaxis: 270+count*20,
+            lvl:1
+        };
+        data.nodes.push(node);
+        count++;
+    }
+    
+    CN3 = CN2+NUMBER_OF_2L2_NODES;
+    count=1;
+    for (let i = CN2; i < CN3; i++) {
+        let node = {
+            id: i,
+            //color: d3.interpolateRainbow(i /NUMBER_OF_L1_NODES),
+            color: "rgb(32, 178, 170)",
+            size: 2,
+            xaxis: 700,
+            yaxis: 260+count*20,
+            lvl:2
+        };
+        data.nodes.push(node);
+        count++;
+    }
+  
+    CN4 = CN3+NUMBER_OF_2L3_NODES;
+    count=1;
+    for (let i = CN3; i < CN4; i++) {
+        let node = {
+            id: i,
+            //color: d3.interpolateRainbow(i /NUMBER_OF_L1_NODES),
+            color: "rgb(32, 178, 170)",
+            size: 2,
+            xaxis: 740,
+            yaxis: 270+count*30,
+            lvl:3
+        };
+        data.nodes.push(node);
+        count++;
+    }
+  
+    count=1;
+    let CN23LastNode=0
+    for (let i = CN3; i < CN4; i++) {
+        let node = {
+            id: i+NUMBER_OF_2L3_NODES,
+            color: "rgb(32, 178, 170)",
+            size: 1,
+            xaxis: 780,
+            yaxis: 270+count*30,
+            lvl:4
+        };
+        data.nodes.push(node);
+        count++;
+        CN23LastNode=i+NUMBER_OF_2L3_NODES;
+    }
+  
+    // Create links.
+      for (let i = CN4Start; i < CN2; i++) {
+        for (let j = CN2 ; j < CN3; j++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[j],
+                    lvl:322,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+        }
+    }
+  
+  
+  
+  
+  for (let i = CN2; i < CN3; i++) {
+        for (let j = CN3 ; j < CN4; j++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[j],
+                    lvl:312,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+        }
+    }
+
+     for (let i = CN3; i < CN4; i++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_2L3_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[i+NUMBER_OF_2L3_NODES],
+                    lvl:323,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+    }
+
+  
+        for (let j = CN4Start ; j < CN2; j++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(v3 /NUMBER_OF_NODES),
+                    source: data.nodes[v3+2],
+                    target: data.nodes[j],
+                    lvl:301,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+        }
+    
+    //--------------------------------Child DNN4----------------------------------------------------
+  
+  // Create Cascade 4
+    // Create nodes.
+    // Create nodes.
+    let CN5Start=CN23LastNode+1;
+        CN2 = CN5Start+NUMBER_OF_2L1_NODES;
+    count=1;
+    for (let i = CN5Start; i < CN2; i++) {
+        let node = {
+            id: i,
+            color: "rgb(255, 140, 0)",
+            size: 2,
+            xaxis: 650,
+            yaxis: 370+count*20,
+            lvl:1
+        };
+        data.nodes.push(node);
+        count++;
+    }
+    
+    CN3 = CN2+NUMBER_OF_2L2_NODES;
+    count=1;
+    for (let i = CN2; i < CN3; i++) {
+        let node = {
+            id: i,
+            color: "rgb(255, 140, 0)",
+            size: 2,
+            xaxis: 700,
+            yaxis: 360+count*20,
+            lvl:2
+        };
+        data.nodes.push(node);
+        count++;
+    }
+  
+    CN4 = CN3+NUMBER_OF_2L3_NODES;
+    count=1;
+    for (let i = CN3; i < CN4; i++) {
+        let node = {
+            id: i,
+            color: "rgb(255, 140, 0)",
+            size: 2,
+            xaxis: 740,
+            yaxis: 370+count*30,
+            lvl:3
+        };
+        data.nodes.push(node);
+        count++;
+    }
+  
+    count=1;
+    let CN24LastNode=0
+    for (let i = CN3; i < CN4; i++) {
+        let node = {
+            id: i+NUMBER_OF_2L3_NODES,
+            color: "rgb(255, 140, 0)",
+            size: 1,
+            xaxis: 780,
+            yaxis: 370+count*30,
+            lvl:4
+        };
+        data.nodes.push(node);
+        count++;
+        CN24LastNode=i+NUMBER_OF_2L3_NODES;
+    }
+  
+    // Create links.
+      for (let i = CN5Start; i < CN2; i++) {
+        for (let j = CN2 ; j < CN3; j++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[j],
+                    lvl:412,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+        }
+    }
+  
+  
+  
+  
+  for (let i = CN2; i < CN3; i++) {
+        for (let j = CN3 ; j < CN4; j++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[j],
+                    lvl:423,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+        }
+    }
+
+     for (let i = CN3; i < CN4; i++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(i /NUMBER_OF_2L3_NODES),
+                    source: data.nodes[i],
+                    target: data.nodes[i+NUMBER_OF_2L3_NODES],
+                    lvl:434,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+    }
+
+  
+        for (let j = CN5Start ; j < CN2; j++) {
+                //let minSize = Math.min(data.nodes[i].size, data.nodes[j].size);
+                let link = {
+                    color: d3.interpolateRainbow(v3 /NUMBER_OF_NODES),
+                    source: data.nodes[v3+3],
+                    target: data.nodes[j],
+                    lvl:401,
+                    weight: Math.floor(randBetween(1, 4))
+                };
+                data.links.push(link);
+        }
+    return data;
+}
+
+
+
+
+
+generateNewData();
+
+PROBABILITY_OF_LINK=0.5
+
+NUMBER_OF_NODES=4
+
+NUMBER_OF_L3_NODES=4
+
+NUMBER_OF_L2_NODES=10
+NUMBER_OF_L1_NODES=6
+NUMBER_OF_INIT_NODES=1
+NUMBER_OF_2L1_NODES=3
+NUMBER_OF_2L2_NODES=5
+NUMBER_OF_2L3_NODES=2
+
+function randBetween(min, max) {
+    return min + (max - min) * Math.random();
+}
+
+

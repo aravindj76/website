@@ -1,4 +1,4 @@
-
+// This file was executed in observableHQ to generate the JSON Data.
 function generateNewData() {
     
     // Reset the data object back to its empty state.
